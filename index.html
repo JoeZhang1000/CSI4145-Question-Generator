@@ -117,6 +117,10 @@
           a: 'Let \\((\\Omega, \\mathbb{P})\\) be a discrete probability space and \\(V\\) a non-negative or \\(\\mathcal{L}^1\\) discrete random variable. We define the expected value (or expectation) of \\(V\\) as \\[E[V] := \\sum_{v \\in \\mathbb{R}} v\\mathbb{P}[V = v] \\] with the convention that \\(\\pm \\infty \\cdot 0 = 0 \\).'
         },
         {
+          q: "Define variance of a discrete random variable.",
+          a: `Let \\( (\\Omega, \\mathbb{P} )\\) be a discrete probability space, and \\(V\\) an \\( \\mathcal{L}^1 \\) discrete random variable. We define the variance of \\(V\\) as \\[ \\text{Var}(V) = \\mathbb{E} \\left[ (V - \\mathbb{E}[V])^2 \\right] = \\mathbb{E}[V^2] - \\mathbb{E}[V]^2 \\]`
+        },
+        {
           q: "Define unsupervised learning",
           a: `An unsupervised learning problem is parameterized by:
             <ol>
@@ -190,6 +194,12 @@
     function startQuiz() {
       currentDifficulty = document.getElementById("difficulty-select").value;
       document.getElementById("difficulty-select-quiz").value = currentDifficulty;
+
+      // 🧹 Clear previous question/answer
+      document.getElementById("question").innerHTML = "<em>Click &quot;Generate Question&quot;</em>";
+      document.getElementById("answer").style.display = "none";
+      document.getElementById("answer").innerHTML = "<em>Answer hidden</em>";
+
       switchScreen("quiz-screen");
     }
 
@@ -206,9 +216,16 @@
       currentDifficulty = diff;
     }
 
+    let lastIndex = -1;
+
     function generateQuestion() {
       const pool = questions[currentDifficulty];
-      const index = Math.floor(Math.random() * pool.length);
+      //let index = Math.floor(Math.random() * pool.length);
+      let index;
+      do{
+        index = Math.floor(Math.random()*pool.length);
+      }while(index == lastIndex);
+      lastIndex = index
       const { q, a } = pool[index];
 
       document.getElementById("question").innerHTML = q;
