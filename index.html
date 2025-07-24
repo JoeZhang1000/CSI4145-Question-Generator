@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSI4145 Machine Learning Exam Prep Question Generator</title>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+  <script>
+  window.MathJax = {
+    tex: {
+      packages: {'[+]': ['ams']}  // load amsmath package in addition to the default
+    }
+  };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+      background-color: lightblue;
+    }
+    .screen {
+      display: none;
+    }
+    .active {
+      display: block;
+    }
+    #question, #answer {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+    button {
+      margin: 0.5rem 0.5rem 1rem 0;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+    }
+    select {
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home Screen -->
+  <div id="home-screen" class="screen active">
+    <h1>CSI4145: Machine Learning </h1>
+    <h2> Question Generator</h2>
+    <p>By: Joe Zhang</p>
+    <p>This is a question generator to help prepare for the final exam. The easy questions are stating definitions with no proofs. The hard questions are stating and proving theorems. Good luck.</p>
+    <p>Please let me know if some questions need to be changed or if more need to be added. This goes for all students and Prof. Cesari.</p>
+    <p>Also, here's <a href = "https://youtu.be/RRSRT_RavYE?si=KEj8mjggFVnmJNNO", target = "_blank">a video</a> you all can watch to better prepare for the exam.</p>
+    <label for="difficulty-select">Choose Difficulty:</label>
+    <select id="difficulty-select">
+      <option value="easy">Easy</option>
+      <option value="hard">Hard</option>
+    </select>
+    <br/><br/>
+    <button onclick="startQuiz()">Start</button>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen" class="screen">
+    <h1>Question Generator</h1>
+    <p>Click Generate Question to generate a question, Reveal Answer to reveal the answer to the question.</p>
+    <p>If anyone has any feedback, please email me at: zzhan503@uottawa.ca.</p>
+
+    <label for="difficulty-select-quiz">Difficulty:</label>
+    <select id="difficulty-select-quiz" onchange="changeDifficulty(this.value)">
+      <option value="easy">Easy</option>
+      <option value="hard">Hard</option>
+    </select>
+
+    <div>
+      <button onclick="generateQuestion()">Generate Question</button>
+      <button onclick="revealAnswer()">Reveal Answer</button>
+      <button onclick="goHome()">Home</button>
+    </div>
+
+    <div id="question"><em>Click "Generate Question"</em></div>
+    <div id="answer" style="display: none;"><em>Answer hidden</em></div>
+  </div>
+
+  <script>
+    const questions = {
+      easy: [
+        {
+          q: "Define discrete probability measure and events of an outcome space.",
+          a: "<br/>Given a set \\( \\Omega \\), which we call the <em>outcome</em> (or <em>sample</em>) space, we say that \\( \\mathbb{P} : 2^{\\Omega} \\to [0, 1] \\) is a <em>discrete probability measure</em> on \\( \\Omega \\) if there exists a discrete density \\( p : \\Omega \\to [0, 1] \\) on \\( \\Omega \\) such that, for all subsets \\( E \\subseteq \\Omega \\) (subsets \\( E \\) of \\( \\Omega \\) are called <em>events</em>), it holds that: \\[ \\mathbb{P}[E] = \\sum_{\\omega \\in E} p(\\omega) \\]<br/><br/> and say that the support \\( \\mathcal{S}_p \\) of this discrete density \\( p \\) is the <em>support</em> \\( \\mathcal{S}_{\\mathbb{P}} \\) of \\( \\mathbb{P} \\). The pair \\( (\\Omega, \\mathbb{P}) \\) is called a <em>discrete probability space</em>."
+        },
+        {
+          q: "Define conditional expectation of random variable.",
+          a: "Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space, \\( V \\) a non-negative or \\( \\mathcal{L}^1 \\) discrete random variable, \\( \\mathcal{W} \\) a set, and \\( W : \\Omega \\to \\mathcal{W} \\) a \\( \\mathcal{W} \\)-valued discrete random variable.<br/><br/>The <em>conditional expectation</em> of \\( V \\) given \\( W \\) is the discrete random variable \\[\\mathbb{E}[V \\mid W] : \\Omega \\to \\mathbb{R}\\]defined, for all \\( \\omega \\in \\Omega \\), by\\[\\mathbb{E}[V \\mid W](\\omega) := \\mathbb{E}[V \\mid W = W(\\omega)],\\]where, for all \\( w \\in \\mathcal{W} \\),\\[\\mathbb{E}[V \\mid W = w] := \\begin{cases} \\sum\\limits_{v \\in \\mathbb{R}} v \\, \\mathbb{P}[V = v \\mid W = w], & \\text{if } \\mathbb{P}[W = w] > 0, \\\\0, & \\text{if } \\mathbb{P}[W = w] = 0.\\end{cases}\\]<br/><br/>(In words, for all \\( w \\in \\mathcal{W} \\) such that \\( \\mathbb{P}[W = w] > 0 \\), \\( \\mathbb{E}[V \\mid W = w] \\) is simply the expectation computed with respect to the conditional probability \\( \\mathbb{P}[\\cdot \\mid W = w] \\).)"
+        },
+        {
+          q: "Define discrete random variable and its discrete distribution.",
+          a: `<p>Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space and \\(\\mathcal{Z}\\) a set. We say that: </p>
+            <ul>
+                <li> A function \\( Z: \\Omega \\rightarrow \\mathcal{Z} \\) is a \\(\\mathcal{Z}\\)-valued random variable. </li>
+                <li> The discrete probability measure on \\(\\mathcal{Z}\\), \\(\\mathcal{D}: 2^{\\mathcal{Z}} \\rightarrow [0, 1]\\) defined for all events \\(E \\subseteq \\mathcal{Z} \\), by \\(\\mathcal{D}(E) := \\mathbb{P}[Z \\in E ] := \\mathbb{P} \\left[ \\{ \\omega \\in \\Omega: Z(\\omega) \\in E \\}\\right]\\) is the (discrete) distribution of \\(Z\\). </li>
+                <li> The function \\(p_Z: \\mathcal{Z} \\rightarrow [0, 1]\\) defined for all \\(z \\in \\mathcal{Z} \\), by \\(p_Z(z) := \\mathbb{P}[Z = z] \\) is the density of \\(Z\\). </li>
+                <li> The pair \\( (\\Omega, \\mathbb{P}) \\) is the probability space that carries \\(Z\\). </li>
+          `
+        },
+        {
+          q: "Define the expectation of a discrete random variable.",
+          a: 'Let \\((\\Omega, \\mathbb{P})\\) be a discrete probability space and \\(V\\) a non-negative or \\(\\mathcal{L}^1\\) discrete random variable. We define the expected value (or expectation) of \\(V\\) as \\[E[V] := \\sum_{v \\in \\mathbb{R}} v\\mathbb{P}[V = v] \\] with the convention that \\(\\pm \\infty \\cdot 0 = 0 \\).'
+        },
+        {
+          q: "Define unsupervised learning",
+          a: `An unsupervised learning problem is parameterized by:
+            <ol>
+                <li> A set \\(\\mathcal{X}\\), called the input space, whose elements are called data points. </li>
+                <li> A set \\(\\mathcal{H}\\), called the hypothesis class, whose elements are called hypotheses. </li>
+                <li> A function \\(\\ell: \\mathcal{H} \\times \\mathcal{X} \\rightarrow [0, +\\infty] \\), called the loss (function). </li>
+            </ol>
+            Given an input space \\(\\mathcal{X} \\), a hypothesis class \\(\\mathcal{H}\\), and a loss function \\(\\ell\\), the goal of unsupervised learning is to design (<em>unsupervised<em>) <em>learning algorithms</em>, i.e. functions \\[\\mathscr{A}: \\mathcal{X}^* \\rightarrow \\mathcal{H} \\] and control their (<em>unsupervised</em>) <em>statistical risk</em> defined, for any \\(n \\in \\mathbb{N} \\) and any i.i.d. sequence of discrete random variables \\(X_1, \\dots, X_n, X \\) taking values in \\(\\mathcal{X}\\), by \\[\\mathbb{E}\\left[ \\ell(\\mathscr{A}(X_1, \\dots, X_n), X) | X_1, \\dots, X_n \\right], \\] where n is called the <em> sample size </em>, \\(X_1, \\dots, X_n\\) are called <em>samples</em>, and the sequence \\((X_1, \\dots, X_n) \\) is called the <em>training set</em>.
+          `
+        }
+      ],
+      hard: [
+        {
+          q: "State and prove the following properties of discrete probability meaasures: monotonicity, probability of a disjoint union, union bound, and probability of complement.",
+          a: `
+<p><em>Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space. Then:</em></p>
+
+<ol>
+  <li><em>Monotonicity:</em> If \\( A, B \\subseteq \\Omega \\) and \\( A \\subseteq B \\), then \\( \\mathbb{P}[A] \\leq \\mathbb{P}[B] \\).</li>
+  <li><em>Probability of a Disjoint Union:</em> If \\( A, B \\subseteq \\Omega \\) and \\( A \\cap B = \\emptyset \\), then \\( \\mathbb{P}[A \\cup B] = \\mathbb{P}[A] + \\mathbb{P}[B] \\).</li>
+  <li><em>Union Bound:</em> If \\( A, B \\subseteq \\Omega \\), then \\( \\mathbb{P}[A \\cup B] \\leq \\mathbb{P}[A] + \\mathbb{P}[B] \\).</li>
+  <li><em>Probability of the Complement:</em> If \\( A \\subseteq \\Omega \\), then \\( \\mathbb{P}[\\Omega \\setminus A] = 1 - \\mathbb{P}[A] \\).</li>
+</ol>
+
+<p><em>Proof.</em> We prove the four points separately:</p>
+
+<ol>
+  <li>
+    If an event \\( A \\) is included in an event \\( B \\), then:
+    \\[
+      \\mathbb{P}[A] = \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}] \\leq \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}] + \\sum_{\\omega' \\in B \\setminus A} \\mathbb{P}[\\{\\omega'\\}] = \\sum_{\\omega \\in B} \\mathbb{P}[\\{\\omega\\}] = \\mathbb{P}[B]
+    \\]
+  </li>
+
+  <li>
+    If \\( A \\) and \\( B \\) are disjoint, then:
+   \\[
+      \\mathbb{P}[A \\cup B] = \\sum_{\\omega \\in A \\cup B} \\mathbb{P}[\\{\\omega\\}] = \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}] + \\sum_{\\omega' \\in B} \\mathbb{P}[\\{\\omega'\\}] = \\mathbb{P}[A] + \\mathbb{P}[B]
+    \\]
+  </li>
+
+  <li>
+    If \\( A \\) and \\( B \\) are general events:
+    \\[
+      \\mathbb{P}[A \\cup B] = \\sum_{\\omega \\in A \\cup B} \\mathbb{P}[\\{\\omega\\}] = \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}] + \\sum_{\\omega' \\in B \\setminus A} \\mathbb{P}[\\{\\omega'\\}] \\leq \\mathbb{P}[A] + \\mathbb{P}[B]
+    \\]
+  </li>
+
+  <li>
+    If \\( A \\subseteq \\Omega \\), since \\( A \\) and \\( \\Omega \\setminus A \\) are disjoint:
+    \\[
+      1 = \\mathbb{P}[\\Omega] = \\mathbb{P}[A \\cup (\\Omega \\setminus A)] = \\mathbb{P}[A] + \\mathbb{P}[\\Omega \\setminus A]
+    \\]
+    Rearranging gives \\( \\mathbb{P}[\\Omega \\setminus A] = 1 - \\mathbb{P}[A] \\).
+  </li>
+</ol>
+`
+        },
+        {
+          q: "State and prove the law of the unconscious statistician (LOTUS).",
+          a: `
+            <p> Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space, \\( \\mathcal{V} \\) a set, \\(V: \\Omega \\rightarrow \\mathcal{V} \\) a \\(\\mathcal{V}\\)-valued discrete random variable, \\(\\mathcal{R} \\) a subset of \\( \\mathbb{R} \\), and \\(f: \\mathbb{V} \\rightarrow \\mathcal{R} \\) such that \\(f(V)\\) is a non-negative or \\(\\mathcal{L}^1\\) discrete random variable, then \\[\\mathbb{E}[f(V)] = \\sum_{v \\in \\mathcal{V}} f(v)\\mathbb{P}[V = v]. \\] </p>
+            <p> <em> Proof.  </em>  By definition of expectation of the random variable \\(f(V)\\), we get \\[ \\begin{aligned} E[f(V)] &= \\sum_{y \\in \\mathcal{R}} y \\mathbb{P}[f(V) = y] = \\sum_{y \\in \\mathcal{R}} y \\sum_{v \\in \\mathcal{V}: f(v) = y} P[V = v] = \\sum_{y \\in \\mathcal{R}} \\sum_{v \\in \\mathcal{V}: f(v) = y} y \\mathbb{P}[V = v] \\\\ &= \\sum_{y \\in \\mathcal{R}} \\sum_{v \\in \\mathcal{V}: f(v) = y} f(v)\\mathbb{P}[V = v] = \\sum_{v \\in \\mathcal{V}} f(v)\\mathbb{P}[V = v]. \\end{aligned}\\]
+          `
+        }
+      ]
+    };
+
+    let currentDifficulty = "easy";
+
+    function startQuiz() {
+      currentDifficulty = document.getElementById("difficulty-select").value;
+      document.getElementById("difficulty-select-quiz").value = currentDifficulty;
+      switchScreen("quiz-screen");
+    }
+
+    function goHome() {
+      switchScreen("home-screen");
+    }
+
+    function switchScreen(id) {
+      document.querySelectorAll(".screen").forEach(div => div.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function changeDifficulty(diff) {
+      currentDifficulty = diff;
+    }
+
+    function generateQuestion() {
+      const pool = questions[currentDifficulty];
+      const index = Math.floor(Math.random() * pool.length);
+      const { q, a } = pool[index];
+
+      document.getElementById("question").innerHTML = q;
+      document.getElementById("answer").style.display = "none";
+      document.getElementById("answer").innerHTML = a;
+
+      MathJax.typesetPromise();  // Re-render LaTeX
+    }
+
+    function revealAnswer() {
+        const answerDiv = document.getElementById("answer");
+        if (answerDiv.style.display === "none" || answerDiv.style.display === ""){
+            answerDiv.style.display = "block";
+        }else{
+            answerDiv.style.display = "none";
+        }
+    }
+  </script>
+</body>
+</html>
