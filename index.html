@@ -58,7 +58,7 @@
     <h2> Question Generator</h2>
     <p>By: Joe Zhang</p>
     <p>This is a question generator to help prepare for the final exam. The easy questions are stating definitions with no proofs. The hard questions are stating and proving theorems. Good luck.</p>
-    <p>Please let me know if some questions need to be changed or if more need to be added. This goes for all students and Prof. Cesari.</p>
+    <p>Please let me know if some questions need to be changed or if more need to be added. This goes for all students and Prof. Cesari. Contact me at zzhan503@uottawa.ca.</p>
     <p>Also, here's <a href = "https://youtu.be/RRSRT_RavYE?si=KEj8mjggFVnmJNNO", target = "_blank">a video</a> you all can watch to better prepare for the exam.</p>
     <label for="difficulty-select">Choose Difficulty:</label>
     <select id="difficulty-select">
@@ -67,6 +67,8 @@
     </select>
     <br/><br/>
     <button onclick="startQuiz()">Start</button>
+    <!--<img src="Cesari.png" alt="Tom Cesari" width="300" style="position: absolute; bottom: 200px; right: 200px;"/> -->
+
   </div>
 
   <!-- Quiz Screen -->
@@ -119,6 +121,10 @@
         {
           q: "Define variance of a discrete random variable.",
           a: `Let \\( (\\Omega, \\mathbb{P} )\\) be a discrete probability space, and \\(V\\) an \\( \\mathcal{L}^1 \\) discrete random variable. We define the variance of \\(V\\) as \\[ \\text{Var}(V) = \\mathbb{E} \\left[ (V - \\mathbb{E}[V])^2 \\right] = \\mathbb{E}[V^2] - \\mathbb{E}[V]^2 \\]`
+        },
+        {
+          q: "Define independent family of discrete random variables.",
+          a: `Let \\( ( \\Omega, \\mathbb{P} )\\) be a discrete probability space, \\( \\Lambda \\) a (possibly infinite) set of indices, \\(\\mathcal{Z}\\) a set, and \\( (Z_{\\lambda})_{\\lambda \\in \\Lambda}\\) a family of \\( \\mathcal{Z} \\)-valued discrete random variables indexed by elements \\( \\lambda \\) of \\( \\Lambda \\). We say that \\( ( Z_{\\lambda})_{\\lambda \\in \\Lambda}\\) is an <em> independent </em> family if, for any <em> finite </em> subset \\( I \\subseteq \\Lambda \\) and any family \\( (E_i)_{i \\in I}\\) of subsets of \\( \\mathcal{Z} \\), it holds that \\[ \\mathbb{P} \\left[ \\bigcap_{i \\in I} \\{Z_i \\in E_i \\} \\right] = \\prod_{i \\in I} \\mathbb{P}[Z_i \\in E_i] \\]`
         },
         {
           q: "Define unsupervised learning",
@@ -185,13 +191,20 @@
             <p> Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space, \\( \\mathcal{V} \\) a set, \\(V: \\Omega \\rightarrow \\mathcal{V} \\) a \\(\\mathcal{V}\\)-valued discrete random variable, \\(\\mathcal{R} \\) a subset of \\( \\mathbb{R} \\), and \\(f: \\mathbb{V} \\rightarrow \\mathcal{R} \\) such that \\(f(V)\\) is a non-negative or \\(\\mathcal{L}^1\\) discrete random variable, then \\[\\mathbb{E}[f(V)] = \\sum_{v \\in \\mathcal{V}} f(v)\\mathbb{P}[V = v]. \\] </p>
             <p> <em> Proof.  </em>  By definition of expectation of the random variable \\(f(V)\\), we get \\[ \\begin{aligned} E[f(V)] &= \\sum_{y \\in \\mathcal{R}} y \\mathbb{P}[f(V) = y] = \\sum_{y \\in \\mathcal{R}} y \\sum_{v \\in \\mathcal{V}: f(v) = y} P[V = v] = \\sum_{y \\in \\mathcal{R}} \\sum_{v \\in \\mathcal{V}: f(v) = y} y \\mathbb{P}[V = v] \\\\ &= \\sum_{y \\in \\mathcal{R}} \\sum_{v \\in \\mathcal{V}: f(v) = y} f(v)\\mathbb{P}[V = v] = \\sum_{v \\in \\mathcal{V}} f(v)\\mathbb{P}[V = v]. \\end{aligned}\\]
           `
+        },
+        {
+          q: "State and prove the theorem relating the expectation of a product of independent discrete random variables and the product of their expectations.",
+          a: `<p>Let \\( (\\Omega, \\mathbb{P}) \\) be a discrete probability space, \\( k \\in \\mathbb{N} \\), and \\( (Z_1, \\dots, Z_k)\\) an independent family of \\( \\mathcal{L}^1 \\) discrete random variables. Then \\[ \\mathbb{E} \\left[ \\prod_{i=1}^{k} Z_i \\right] = \\prod_{i = 1}^{k} \\mathbb{E}[Z_i].\\] </p>
+          <p> <em>Proof. </em> Define the "product" function \\(f: \\mathbb{R}^k \\rightarrow \\mathbb{R} \\), for all \\( (z_1, \\dots, z_k) \\in \\mathbb{R}^k \\), by \\( f(z_1, \\dots, z_k) := z_1 \\cdots z_k \\). Noting that \\( \\prod_{i=1}^{k} Z_i = f(Z_1, \\dots, Z_k)\\) is an \\( \\mathcal{L}^1 \\) discrete random variable, by the law of the unconcscious statistician, \\[ \\begin{aligned} \\mathbb{E} \\left[ \\prod_{i=1}^k Z_i \\right] &= \\mathbb{E}[f(Z_1, \\dots, Z_k)] = \\sum_{(z_1, \\dots, z_k) \\in \\mathbb{R}^k} f(z_1, \\dots, z_k) \\mathbb{P}[(Z_1, \\dots, Z_k) = (z_1, \\dots, z_k)] \\\\ &= \\sum_{x_1 \\in \\mathbb{R}} \\cdots \\sum_{z_k \\in \\mathbb{R}} z_1 \\cdots z_k \\mathbb{P} \\left[ \\bigcap_{i=1}^k \\{ Z_i = z_i \\} \\right] = \\sum_{x_1 \\in \\mathbb{R}} \\cdots \\sum_{x_k \\in \\mathbb{R}} z_1 \\cdots z_k \\prod_{i=1}^k \\mathbb{P}[Z_i = z_i] \\\\ &= \\sum_{z_1 \\in \\mathbb{R}} z_1 \\mathbb{P}[Z_1 = z_1] \\cdot \\sum_{z_2 \\in \\mathbb{R}} z_2 \\mathbb{P}[Z_2 = z_2] \\cdots \\sum_{z_k \\ in \\mathbb{R}} z_k \\mathbb{P}[Z_k = z_k] = \\prod_{i = 1}^k \\mathbb{E}[Z_k] \\end{aligned} \\] </p>` 
         }
       ]
     };
 
     let currentDifficulty = "easy";
+    let lastIndex = -1;
 
     function startQuiz() {
+      lastIndex = -1;
       currentDifficulty = document.getElementById("difficulty-select").value;
       document.getElementById("difficulty-select-quiz").value = currentDifficulty;
 
@@ -204,6 +217,7 @@
     }
 
     function goHome() {
+      document.getElementById("difficulty-select").value = currentDifficulty;
       switchScreen("home-screen");
     }
 
@@ -216,7 +230,6 @@
       currentDifficulty = diff;
     }
 
-    let lastIndex = -1;
 
     function generateQuestion() {
       const pool = questions[currentDifficulty];
